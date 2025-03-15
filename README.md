@@ -26,8 +26,8 @@ You can run this project either locally or using Docker. Choose the method that 
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
-cd <repository-name>
+git clone https://github.com/vaibhav-chaudhari6696/ProjectAccessControlAPI.git
+cd ProjectAccessControlAPI
 ```
 
 2. Create and activate a virtual environment:
@@ -81,8 +81,8 @@ API documentation will be available at http://localhost:8000/docs
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
-cd <repository-name>
+git clone https://github.com/vaibhav-chaudhari6696/ProjectAccessControlAPI.git
+cd ProjectAccessControlAPI
 ```
 
 2. Set up environment variables:
