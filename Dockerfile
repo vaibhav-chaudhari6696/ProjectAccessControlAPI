@@ -1,26 +1,39 @@
-FROM python:3.9-slim
+# Use Node.js LTS version
+FROM node:18-alpine
 
+# Set working directory
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-        postgresql-client \
-    && rm -rf /var/lib/apt/lists/*
+# Copy package files for backend
+COPY backend/package*.json ./backend/
 
-# Copy requirements first to leverage Docker cache
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy package files for frontend
+COPY frontend/package*.json ./frontend/
 
-# Copy the rest of the application
-COPY . .
+# Install dependencies for both services
+WORKDIR /app/backend
+RUN npm install
 
-# Expose the port the app runs on
-EXPOSE 8000
+WORKDIR /app/frontend
+RUN npm install
 
-# Create a non-root user and switch to it
-RUN useradd -m myuser
-USER myuser
+# Copy backend source code
+WORKDIR /app/backend
+COPY backend/ .
 
-# Command to run the application
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"] 
+# Copy frontend source code
+WORKDIR /app/frontend
+COPY frontend/ .
+
+# Copy entrypoint script
+COPY entrypoint.sh /app/
+RUN chmod +x /app/entrypoint.sh
+
+# Set environment variables
+ENV NODE_ENV=production
+
+# Expose both backend and frontend ports
+EXPOSE 9999 10000
+
+# Set the entrypoint script
+ENTRYPOINT ["sh", "/app/entrypoint.sh"]
